@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Dashboard - Focus Flow</title>
+
+    <!-- Link to Chart.js for the EEG graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header with all navigation options -->
+    <header class="main-header">
+        <a href="index.html" class="brand-logo">
+            <img src="logo.png" alt="Focus Flow Logo">
+            <h1 class="brand-logo-name">Focus Flow</h1>
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="focus.html">Focus Mode</a></li>
+                <li><a href="relax.html">Relax Mode</a></li>
+                <li><a href="saved.html">Saved Songs</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="container">
+        <h1>Dashboard</h1>
+        <p>Welcome to your dashboard! Here, you can view your EEG data and monitor your brainwave activity in real time.</p>
+        
+        <!-- EEG Graph Section -->
+        <section class="eeg-section">
+            <h2>Real-Time EEG Data Visualization</h2>
+            <!-- Canvas for EEG Chart -->
+            <canvas id="eegChart" width="800" height="400"></canvas>
+        </section>
+    </div>
+
+    <!-- Link to the JavaScript file containing WebSocket and chart setup -->
+    <script src="socketel.js"></script>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
