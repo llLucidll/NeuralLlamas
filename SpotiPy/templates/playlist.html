@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Playlist - NPC</title>
+    <!-- Include the Spotify IFrame API -->
+    <script src="https://open.spotify.com/embed-podcast/iframe-api/v1"></script>
+    <script>
+        // Function to send the current song ID to the server
+        function logCurrentSong(songId) {
+            fetch('/log_song', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ song_id: songId })
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to log song:', response.statusText);
+                } else {
+                    console.log(`Logged song ID: ${songId}`);
+                }
+            }).catch(error => {
+                console.error('Error logging song:', error);
+            });
+        }
+
+        // Spotify IFrame API Ready function
+        window.onSpotifyIframeApiReady = (IFrameAPI) => {
+            const iframes = document.querySelectorAll('.spotify-embed');
+            iframes.forEach((iframe) => {
+                const element = iframe;
+                const options = {
+                    uri: iframe.getAttribute('data-uri'),
+                    songId: iframe.getAttribute('songID')
+                };
+
+                const callback = (EmbedController) => {
+                    // Add event listener for playback updates
+                    EmbedController.addListener('playback_update', (e) => {
+                        if (e.data.isPaused) {
+                            console.log(`Paused song: ${options.uri}`);
+                            // console.log(`Song ID: ${options.songId}`);
+                            logCurrentSong(options.songId);
+                        } else {
+                            console.log(`Playing song: ${options.uri}`);
+                            // console.log(`Song ID: ${options.songId}`);
+                            logCurrentSong(options.songId);
+                        }
+                    });
+                };
+
+                // Create the controller for each iframe
+                IFrameAPI.createController(element, options, callback);
+            });
+        };
+    </script>
+</head>
+<body>
+    <h1>Playlist: {{ playlist_name }}</h1>
+    <ul>
+        {% for track in tracks %}
+            <li>
+                <strong>{{ track.name }}</strong> by {{ track.artist }}
+                <br>
+                <iframe 
+                    id="iframe-{{ loop.index }}" 
+                    src="{{ track.embed_url }}?enable-spotify-embed=true" 
+                    data-uri="spotify:track:{{ track.embed_url.split('/')[-1].split('?')[0] }}"
+                    songID="{{track.songid}}"
+                    class="spotify-embed"
+                    width="300" 
+                    height="80" 
+                    frameborder="0" 
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+                </iframe>
+                <br>
+            </li>
+            <br>
+        {% endfor %}
+    </ul>
+</body>
+</html>

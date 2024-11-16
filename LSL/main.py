@@ -180,8 +180,8 @@ if __name__ == "__main__":
             # Beta Protocol:
             # Beta waves have been used as a measure of mental activity and concentration
             # This beta over theta ratio is commonly used as neurofeedback for ADHD
-            beta_metric = smooth_band_powers[Band.Beta] / \
-                smooth_band_powers[Band.Theta]
+            beta_metric = band_powers[Band.Beta] / \
+                band_powers[Band.Theta] 
             print('Beta Concentration: ', beta_metric)
 
             # Alpha/Theta Protocol:

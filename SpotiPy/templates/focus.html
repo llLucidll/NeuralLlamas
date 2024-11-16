@@ -1,0 +1,69 @@
+<!-- focus.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Mode - Focus Flow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container full-height-grow">
+        <!-- Header -->
+        <header class="main-header">
+            <a href="/" class="brand-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Focus Flow Logo">
+                <h1 class="brand-logo-name">Focus Flow</h1>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/focus" class="active">Focus Mode</a></li>
+                    <li><a href="/relax">Relax Mode</a></li>
+                    <li><a href="/saved">Saved Songs</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container">
+            <section class="playlist-section">
+                <h1 class="title">Focus Playlist</h1>
+                <p class="description">Curated music to help you concentrate and stay productive!</p>
+                <div class="playlist-container">
+                    <!-- Embed Spotify Playlist -->
+                    <iframe 
+                        src="https://open.spotify.com/embed/playlist/{{ playlist_id }}" 
+                        width="100%" height="380" frameborder="0" 
+                        allow="encrypted-media" allowtransparency="true">
+                    </iframe>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="/about">About Us</a></li>
+                </ul>
+            </nav>
+            <nav class="footer-nav">
+                <ul>
+                    <li>
+                        <a href="https://github.com/GrizzlyScar/NeuroLlama.git" class="social-link" target="_blank">
+                            GitHub
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
