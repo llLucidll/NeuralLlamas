@@ -213,17 +213,18 @@ def recommended():
         link = 'mongodb+srv://srivanthchitta52:focusflow123@neuralllama.nep0f.mongodb.net/NeuralLlama?tlsAllowInvalidCertificates=true'
 
         client = MongoClient(link)
-        db = client['audio_database']  # Replace with your database name
+        db = client['NeuralLlama']  # Replace with your database name
         fs = gridfs.GridFS(db)
 
         output_path = "SpotiPy/static/new.wav"
-        file = fs.find_one({"filename": "audio_file.wav"})  # Replace with your file's name
+        file = fs.find_one({"filename": "song.wav"})  # Replace with your file's name
 
         if file:
             with open(output_path, "wb") as output_file:
                 output_file.write(file.read())
             print(f"File retrieved and saved as: {output_path}")
 
+            output_path = 'new.wav'
             # Pass the selected song to the template
             return render_template('recommended.html', song_file=output_path)
         else:
