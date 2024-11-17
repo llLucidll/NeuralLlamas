@@ -13,7 +13,7 @@ body {
   padding: 0;
 }
 
-/* header and footer */
+/* Header and Footer */
 
 .main-nav ul,
 .footer-nav ul {
@@ -53,10 +53,10 @@ body {
   text-decoration: none;
 }
 
-.brand-logo-name {
-  font-size: 1.25em;
-  font-weight: normal;
-  margin: 0 0 0 1rem;
+.brand-logo img {
+  width: 50px; /* Adjust the width to make the logo smaller */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Space between the logo and the text */
 }
 
 .main-footer {
@@ -75,7 +75,7 @@ body {
   justify-content: space-between;
 }
 
-/* layout */
+/* Layout */
 
 .full-height-grow {
   display: flex;
@@ -90,7 +90,7 @@ body {
   flex-grow: 1;
 }
 
-/* hero */
+/* Hero Section */
 
 .hero-section {
   display: flex;
@@ -128,62 +128,86 @@ body {
   font-size: 3em;
   margin-bottom: 1rem;
   margin-top: 0;
+  text-align: center;
 }
 
 .subtitle {
   font-weight: 500;
   font-size: 1.2em;
   margin-bottom: 2rem;
+  text-align: center;
+  color: #d1d1d1;
+}
+
+/* Buttons */
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Add space between buttons */
+  margin-top: 20px;
 }
 
 .btn {
   cursor: pointer;
-  background-color: #1762a7;
+  display: inline-block;
+  width: 150px; /* Fixed button width */
+  height: 50px; /* Fixed button height */
   color: white;
+  text-align: center;
+  line-height: 50px; /* Vertically center text */
   text-decoration: none;
-  font-size: 0.9rem;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  outline: none;
-  border: none;
-}
-
-.btn:hover {
-  background-color: #2180d8;
-}
-
-.btn:focus {
-  background-color: #2796ff;
-}
-
-/* 3D Effect for Generate Music Button */
-.generate-btn {
-  padding: 15px 30px;
-  font-size: 1.2em;
-  color: #fff;
-  background: linear-gradient(145deg, #1762a7, #0e4d89);
-  border: none;
+  font-size: 1rem;
   border-radius: 10px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2), 
               0px 4px 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  text-decoration: none;
   transition: all 0.3s ease;
-  display: inline-block;
 }
 
-.generate-btn:hover {
-  transform: translateY(-5px);
-  background: linear-gradient(145deg, #2180d8, #1762a7);
-  box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.3),
-              0px 8px 15px rgba(0, 0, 0, 0.2);
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.3);
 }
 
-.generate-btn:active {
-  transform: translateY(2px);
-  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2),
-              0px 3px 5px rgba(0, 0, 0, 0.15);
+.btn.spotify-login {
+  background-color: #1DB954; /* Spotify green */
 }
+
+.btn.spotify-login:hover {
+  background-color: #1AA34A; /* Darker Spotify green on hover */
+}
+
+.btn.generate-btn {
+  background-color: #1762a7; /* Blue */
+}
+
+.btn.generate-btn:hover {
+  background-color: #125488; /* Darker blue on hover */
+}
+
+.next-btn {
+  background-color: #4caf50; /* Green for "Next" */
+}
+
+.next-btn:hover {
+  background-color: #388e3c; /* Darker green for hover */
+}
+
+/* Playlist Section */
+.playlist-section {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.playlist-container {
+  margin: 20px auto;
+  max-width: 600px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Hero Circles */
 
 .hero-circle-1 {
   position: absolute;
@@ -192,7 +216,7 @@ body {
   width: 25vw;
   height: 25vw;
   border-radius: 50%;
-  background-color: rgb(188, 58, 128, 0.1);
+  background-color: rgba(188, 58, 128, 0.1);
   z-index: -1;
 }
 
@@ -203,7 +227,7 @@ body {
   width: 25vw;
   height: 25vw;
   border-radius: 50%;
-  background-color: rgb(52, 87, 178, 0.1);
+  background-color: rgba(52, 87, 178, 0.1);
   z-index: -1;
 }
 
@@ -223,7 +247,52 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: rgb(52, 87, 178, 0.1);
+  background-color: rgba(52, 87, 178, 0.1);
   transform: translate(40%, 40%);
 }
 
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .btn-container {
+    flex-direction: column; /* Stack buttons vertically on smaller screens */
+    align-items: center;
+  }
+
+  .playlist-container {
+    width: 90%; /* Adjust playlist container width for smaller screens */
+  }
+}
+
+/* Flex Container for Side-by-Side Layout */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px; /* Add spacing between the two sections */
+}
+
+/* Playlist Section Styling */
+.playlist-section {
+    flex: 1;
+    max-width: 50%; /* Limit the width of the playlist section */
+}
+
+/* EEG Section Styling */
+.eeg-section {
+    flex: 1;
+    max-width: 50%; /* Limit the width of the EEG graph section */
+    text-align: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .flex-container {
+        flex-direction: column; /* Stack sections vertically on smaller screens */
+        align-items: center;
+    }
+
+    .playlist-section,
+    .eeg-section {
+        max-width: 100%; /* Full width for smaller screens */
+    }
+}

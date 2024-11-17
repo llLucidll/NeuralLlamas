@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Recommended Songs - Focus Flow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     <style>
         /* Optional styling for song recommendations */
         .container {
@@ -28,16 +29,17 @@
 </head>
 <body>
     <header class="main-header">
-        <a href="index.html" class="brand-logo">
-            <img src="logo.png" alt="Focus Flow Logo">
+        <a href="/index" class="brand-logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Focus Flow Logo">
             <h1 class="brand-logo-name">Focus Flow</h1>
         </a>
         <nav class="main-nav">
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="focus.html">Focus Mode</a></li>
-                <li><a href="relax.html">Relax Mode</a></li>
-                <li><a href="saved.html">Saved Songs</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/focus" class="active">Focus Mode</a></li>
+                <li><a href="/relax">Relax Mode</a></li>
+                <li><a href="/saved">Saved Songs</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
             </ul>
         </nav>
     </header>

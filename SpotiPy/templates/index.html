@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Focus Flow</title>
-    <style>
-        /* Any additional CSS (if needed) */
-    </style>
 </head>
 <body>
     <div class="container full-height-grow">
         <!-- Header with logo aligned to the left -->
         <header class="main-header">
-            <a href="index.html" class="brand-logo">
+            <a href="/" class="brand-logo">
                 <img src="{{ url_for('static', filename='logo.png') }}" alt="Focus Flow Logo">
                 <h1 class="brand-logo-name">Focus Flow</h1>
             </a>
@@ -38,7 +35,6 @@
                 <span class="subtitle">Stream personalized music to help you focus or relax</span>
                 <div class="btn-container">
                     <a href="/login" class="btn spotify-login">Login with Spotify</a>
-                    <a href="/recommended" class="btn generate-btn">Generate</a>
                 </div>
             </div>
         </section>
@@ -73,6 +69,7 @@
     </footer>
 </body>
 </html>
+
 
 
 

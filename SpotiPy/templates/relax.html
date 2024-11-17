@@ -1,4 +1,3 @@
-<!-- relax.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relax Mode - Focus Flow</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container full-height-grow">
@@ -18,8 +18,8 @@
             <nav class="main-nav">
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/focus" class="active">Focus Mode</a></li>
-                    <li><a href="/relax">Relax Mode</a></li>
+                    <li><a href="/focus">Focus Mode</a></li>
+                    <li><a href="/relax" class="active">Relax Mode</a></li>
                     <li><a href="/saved">Saved Songs</a></li>
                     <li><a href="/dashboard">Dashboard</a></li>
                 </ul>
@@ -28,20 +28,102 @@
 
         <!-- Main Content -->
         <main class="container">
-            <section class="playlist-section">
-                <h1 class="title">Relax Playlist</h1>
-                <p class="description">Curated music to help you stay calm and composed!</p>
-                <div class="playlist-container">
-                    <!-- Embed Spotify Playlist -->
-                    <iframe 
-                        src="https://open.spotify.com/embed/playlist/{{ playlist_id }}" 
-                        width="100%" height="380" frameborder="0" 
-                        allow="encrypted-media" allowtransparency="true">
-                    </iframe>
+            <section class="flex-container">
+                <!-- Playlist Section -->
+                <div class="playlist-section">
+                    <h1 class="title">Relax Playlist</h1>
+                    <p class="description">Curated music to help you stay calm and composed!</p>
+                    <div class="playlist-container">
+                        <!-- Embed Spotify Playlist -->
+                        <iframe
+                            class="spotify-embed"
+                            data-uri="spotify:track:{{ track_id }}" 
+                            songID="{{ track_id }}"
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/track/{{ track_id }}?utm_source=generator" 
+                            width="100%" 
+                            height="352" 
+                            frameBorder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="btn-container">
+                        <button onclick="location.reload()" class="btn next-btn">Next</button>
+                        <a href="/recommended" class="btn generate-btn">Generate</a>
+                    </div>
+                </div>
+
+                <!-- Real-Time EEG Chart Section -->
+                <div class="eeg-section">
+                    <h2>Real-Time Calmness and Concentration</h2>
+                    <canvas id="relaxChart" width="400" height="300"></canvas>
                 </div>
             </section>
         </main>
     </div>
+
+    <!-- EEG Chart Script -->
+    <script>
+        const socket = new WebSocket('ws://localhost:8765'); // Update the WebSocket URL if needed
+        let relaxChart;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const ctx = document.getElementById('relaxChart').getContext('2d');
+            relaxChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Calmness',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            data: []
+                        },
+                        {
+                            label: 'Concentration',
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            data: []
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time (s)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amplitude'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // WebSocket message handling
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                relaxChart.data.labels.push(new Date().toLocaleTimeString());
+                relaxChart.data.datasets[0].data.push(data.alpha); // Example for calmness
+                relaxChart.data.datasets[1].data.push(data.concentration); // Example for concentration
+                
+                if (relaxChart.data.labels.length > 30) {
+                    relaxChart.data.labels.shift();
+                    relaxChart.data.datasets.forEach(dataset => dataset.data.shift());
+                }
+
+                relaxChart.update();
+            };
+        });
+    </script>
 
     <!-- Footer -->
     <footer class="main-footer">
@@ -64,5 +146,8 @@
     </footer>
 </body>
 </html>
+
+
+
 
 
