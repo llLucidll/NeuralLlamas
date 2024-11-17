@@ -98,8 +98,8 @@ def focus_mode():
         print("Songs with average_concentration > 0.4:")
         print(song_ids)
 
-        # recommended_track_id = get_recommendations(sp, ','.join(song_ids))
-        recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
+        recommended_track_id = get_recommendations(sp, ','.join(song_ids))
+        # recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
         return render_template("focus.html", track_id=recommended_track_id)
     except Exception as e:
         app.logger.error(f"Error fetching Focus track: {e}")
@@ -249,7 +249,8 @@ def submit_feedback():
             "tempo": feedback_data['tempo'],
             "loudness": feedback_data['loudness'],
             "energy": feedback_data['energy'],
-            "overall_sat": feedback_data['satisfaction']
+            "overall_sat": feedback_data['satisfaction'],
+            "processed": False
         }
     }
     collection.update_one(query, update)

@@ -5,72 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recommended Songs - Focus Flow</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
     <style>
         .container {
             max-width: 800px;
             margin: auto;
             padding: 20px;
         }
+
         h1 {
             font-size: 1.8em;
         }
+
         .audio-player {
             margin: 20px 0;
         }
+
         .feedback-box {
             margin: 20px 0;
         }
+
         .feedback-section {
             margin-bottom: 20px;
         }
+
         .feedback-label {
             display: block;
             font-weight: bold;
             margin-bottom: 10px;
         }
+
         .options-group {
             display: flex;
             gap: 10px;
         }
 
-        /* Hide the default radio button */
         .option-button {
             display: none;
         }
 
-        /* Style the label as a black button */
         .option-label {
             display: inline-block;
             padding: 10px 20px;
             font-size: 1em;
             font-weight: bold;
             border-radius: 25px;
-            background-color: #000; /* Black background */
-            color: #fff; /* White text */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            background-color: #000;
+            color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
         }
 
-        /* Highlight the button when selected */
         .option-button:checked + .option-label {
-            background-color: #fff; /* White background */
-            color: #000; /* Black text */
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
-            transform: translateY(-2px); /* Lift effect */
+            background-color: #fff;
+            color: #000;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
         }
 
-        /* Style for the Generate button */
         .generate-btn {
             display: inline-block;
             padding: 12px 24px;
             font-size: 1.2em;
             border-radius: 25px;
-            background-color: #000; /* Black background */
-            color: #fff; /* White text */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            background-color: #000;
+            color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             border: none;
             cursor: not-allowed;
             text-align: center;
@@ -79,13 +80,34 @@
 
         .generate-btn.enabled {
             cursor: pointer;
-            background-color: #000; /* Black background remains when enabled */
-            color: #fff; /* White text remains */
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+            background-color: #000;
+            color: #fff;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
         }
 
         .generate-btn.enabled:hover {
-            transform: translateY(-2px); /* Lift effect */
+            transform: translateY(-2px);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 1.5em;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-screen.visible {
+            display: flex;
         }
     </style>
 </head>
@@ -194,8 +216,14 @@
         </section>
     </div>
 
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <p>Loading your next personalized song... Please wait.</p>
+    </div>
+
     <script>
         const generateButton = document.getElementById('generate-btn');
+        const loadingScreen = document.getElementById('loading-screen');
         const feedbackGroups = ['tempo', 'loudness', 'energy', 'satisfaction'];
 
         // Allow unselecting options
@@ -214,7 +242,6 @@
             });
         });
 
-        // Enable "Generate" button only if all groups are selected
         function checkSelections() {
             const allSelected = feedbackGroups.every(group =>
                 document.querySelector(`input[name="${group}"]:checked`)
@@ -223,14 +250,23 @@
             if (allSelected) {
                 generateButton.disabled = false;
                 generateButton.classList.add('enabled');
-                // generateButton.onclick = () => window.location.reload();
-                generateButton.onclick = sendFeedback; // Send data instead of reloading
+                generateButton.onclick = sendFeedback;
             } else {
                 generateButton.disabled = true;
                 generateButton.classList.remove('enabled');
                 generateButton.onclick = null;
             }
         }
+
+        // function showLoadingScreen() {
+        //     // Display the loading screen
+        //     loadingScreen.classList.add('visible');
+
+        //     // Simulate the 2:30 wait time
+        //     setTimeout(() => {
+        //         window.location.reload();
+        //     }, 150000); // 2 minutes and 30 seconds
+        // }
 
         function sendFeedback() {
         const feedbackData = {};
@@ -256,10 +292,19 @@
             }
         })
         .catch(error => console.error('Error:', error));
+
+        // Display the loading screen
+        loadingScreen.classList.add('visible');
+
+        // Simulate the 2:30 wait time
+        setTimeout(() => {
+            window.location.reload();
+        }, 150000); // 2 minutes and 30 seconds
     }
     </script>
 </body>
 </html>
+
 
 
 
