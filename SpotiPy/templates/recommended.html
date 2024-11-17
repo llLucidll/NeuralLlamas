@@ -223,12 +223,40 @@
             if (allSelected) {
                 generateButton.disabled = false;
                 generateButton.classList.add('enabled');
-                generateButton.onclick = () => window.location.reload();
+                // generateButton.onclick = () => window.location.reload();
+                generateButton.onclick = sendFeedback; // Send data instead of reloading
             } else {
                 generateButton.disabled = true;
                 generateButton.classList.remove('enabled');
+                generateButton.onclick = null;
             }
         }
+
+        function sendFeedback() {
+        const feedbackData = {};
+        feedbackGroups.forEach(group => {
+            const selectedInput = document.querySelector(`input[name="${group}"]:checked`);
+            if (selectedInput) {
+                feedbackData[group] = selectedInput.value;
+            }
+        });
+
+        fetch('/submit-feedback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(feedbackData),
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Feedback submitted successfully!');
+            } else {
+                alert('Error submitting feedback. Please try again.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
     </script>
 </body>
 </html>

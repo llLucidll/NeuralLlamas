@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, session, url_for, render_template
+from flask import Flask, redirect, request, session, url_for, render_template, jsonify
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 import os
@@ -9,6 +9,10 @@ import time
 import websocket
 from pymongo import MongoClient
 import random
+import wave
+import os
+from flask import Flask, render_template
+import gridfs
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -94,8 +98,8 @@ def focus_mode():
         print("Songs with average_concentration > 0.4:")
         print(song_ids)
 
-        recommended_track_id = get_recommendations(sp, ','.join(song_ids))
-        # recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
+        # recommended_track_id = get_recommendations(sp, ','.join(song_ids))
+        recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
         return render_template("focus.html", track_id=recommended_track_id)
     except Exception as e:
         app.logger.error(f"Error fetching Focus track: {e}")
@@ -137,8 +141,8 @@ def relax_mode():
         print(song_ids)
         print(','.join(song_ids))
 
-        recommended_track_id = get_recommendations(sp, ','.join(song_ids))
-        # recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
+        # recommended_track_id = get_recommendations(sp, ','.join(song_ids))
+        recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
 
         return render_template("relax.html", track_id=recommended_track_id)
     except Exception as e:
@@ -196,21 +200,60 @@ def send_focus():
     return redirect(url_for('recommended'))
 
 
-recommended_songs = ["demo_song.mp3", "another_song.mp3", "example_song.mp3"]
+# recommended_songs = ["demo_song.mp3", "another_song.mp3", "example_song.mp3"]
 
 @app.route('/recommended')
 def recommended():
     """Render the Recommended page."""
     try:
         # Dynamically select a random song from the list
-        selected_song = random.choice(recommended_songs)
-        
-        # Pass the selected song to the template
-        return render_template('recommended.html', song_file=selected_song)
+        # selected_song = random.choice(recommended_songs)
+        # Retrieve .wav file from MongoDB by filename
+
+        link = 'mongodb+srv://srivanthchitta52:focusflow123@neuralllama.nep0f.mongodb.net/NeuralLlama?tlsAllowInvalidCertificates=true'
+
+        client = MongoClient(link)
+        db = client['audio_database']  # Replace with your database name
+        fs = gridfs.GridFS(db)
+
+        output_path = "SpotiPy/static/new.wav"
+        file = fs.find_one({"filename": "audio_file.wav"})  # Replace with your file's name
+
+        if file:
+            with open(output_path, "wb") as output_file:
+                output_file.write(file.read())
+            print(f"File retrieved and saved as: {output_path}")
+
+            # Pass the selected song to the template
+            return render_template('recommended.html', song_file=output_path)
+        else:
+            print("File not found.")
+
     except Exception as e:
         print(f"Error rendering recommended page: {e}")
         return "Failed to load recommended page", 500
 
+@app.route('/submit-feedback', methods=['POST'])
+def submit_feedback():
+    feedback_data = request.json  # Parse JSON data from request
+    print('Feedback received:', feedback_data)
+    print('Feedback loudness received:', feedback_data['loudness'])
+    link = 'mongodb+srv://srivanthchitta52:focusflow123@neuralllama.nep0f.mongodb.net/NeuralLlama?tlsAllowInvalidCertificates=true'
+    cluster = MongoClient(link)
+    db = cluster['NeuralLlama']
+    collection = db['feedback']
+    query = {"randomID": 1}
+    update = {
+        "$set": {
+            "tempo": feedback_data['tempo'],
+            "loudness": feedback_data['loudness'],
+            "energy": feedback_data['energy'],
+            "overall_sat": feedback_data['satisfaction']
+        }
+    }
+    collection.update_one(query, update)
+    # Process the feedback here, e.g., save to a database or log file
+    return jsonify({'message': 'Feedback received successfully!'}), 200
 
 # ---------------------------------------------
 # Spotify Integration Routes
@@ -391,7 +434,7 @@ def generate_button(which_button):
             }
         }
         collection.update_one(query, update)
-
+    
 # ---------------------------------------------
 # Run Flask App
 # ---------------------------------------------
