@@ -95,6 +95,7 @@ def focus_mode():
         print(song_ids)
 
         recommended_track_id = get_recommendations(sp, ','.join(song_ids))
+        # recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
         return render_template("focus.html", track_id=recommended_track_id)
     except Exception as e:
         app.logger.error(f"Error fetching Focus track: {e}")
@@ -117,7 +118,7 @@ def relax_mode():
         collection = db['concentration']
 
         # Query to find songs with average_concentration > 0.4
-        query = { 'average_calm': { '$lt': 0.15 } }
+        query = { 'average_calm': { '$lt': 0.2 } }
 
         # Projection to include only songID and exclude _id
         projection = { 'songID': 1, '_id': 0 }
@@ -132,10 +133,13 @@ def relax_mode():
         cluster.close()
 
         # Output the list of song IDs
-        print("Songs with average_calm > 0.4:")
+        print("Songs with average_calm < 0.2:")
         print(song_ids)
+        print(','.join(song_ids))
 
         recommended_track_id = get_recommendations(sp, ','.join(song_ids))
+        # recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
+
         return render_template("relax.html", track_id=recommended_track_id)
     except Exception as e:
         app.logger.error(f"Error fetching Relax track: {e}")
@@ -182,14 +186,27 @@ def dashboard():
         print(f"Error rendering dashboard: {e}")
         return "Failed to load dashboard", 500
 
+@app.route('/generate', methods=['POST'])
+def send_focus():
+    # Retrieve the "focus" value from the form
+    state = request.form.get('focus_value')
+    print(f"Received value: {state}")  # For debugging or further processing
+    generate_button(state)
+    # Redirect to the recommended.html page
+    return redirect(url_for('recommended'))
+
+
+recommended_songs = ["demo_song.mp3", "another_song.mp3", "example_song.mp3"]
 
 @app.route('/recommended')
 def recommended():
     """Render the Recommended page."""
     try:
-        # Logic for fetching or generating recommendations can be added here.
-        # For example, fetching recommended songs or playlists from Spotify.
-        return render_template('recommended.html')
+        # Dynamically select a random song from the list
+        selected_song = random.choice(recommended_songs)
+        
+        # Pass the selected song to the template
+        return render_template('recommended.html', song_file=selected_song)
     except Exception as e:
         print(f"Error rendering recommended page: {e}")
         return "Failed to load recommended page", 500
@@ -355,11 +372,25 @@ def get_or_create_playlist(sp, playlist_name, description):
     user_profile = sp.me()
     return sp.user_playlist_create(user=user_profile['id'], name=playlist_name, public=False, description=description)
 
-def get_recommendations(sp, song_id, num_tracks=100):
+def get_recommendations(sp, song_id, num_tracks=50):
     recommended_tracks = sp.recommendations(seed_tracks=[song_id], limit=num_tracks)
     recommended_track = recommended_tracks['tracks'][random.randint(0, num_tracks-1)]['id']
     print(recommended_track)
     return recommended_track
+
+def generate_button(which_button):
+        link = 'mongodb+srv://srivanthchitta52:focusflow123@neuralllama.nep0f.mongodb.net/NeuralLlama?tlsAllowInvalidCertificates=true'
+        cluster = MongoClient(link)
+        db = cluster['NeuralLlama']
+        collection = db['state']
+        query = {"randomID": 1}
+        update = {
+            "$set": {
+                "generate": True,
+                "state": which_button
+            }
+        }
+        collection.update_one(query, update)
 
 # ---------------------------------------------
 # Run Flask App

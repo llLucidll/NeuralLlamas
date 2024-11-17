@@ -1,3 +1,3 @@
-client_id='8139a8617de5471592733d77b196b1ac'
-client_secret='462908363043407fb55f66da89b464a7'
+client_id='7469da7039ea42439c91d4b4789fc480'
+client_secret='5e34d16b977347718f5f445712a13dd7'
 redirect_uri='http://127.0.0.1:3000/callback'

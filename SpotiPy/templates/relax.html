@@ -20,7 +20,7 @@
                     <li><a href="/">Home</a></li>
                     <li><a href="/focus">Focus Mode</a></li>
                     <li><a href="/relax" class="active">Relax Mode</a></li>
-                    <li><a href="/saved">Saved Songs</a></li>
+                    <li><a href="/saved">Personalized Tracks</a></li>
                     <li><a href="/dashboard">Dashboard</a></li>
                 </ul>
             </nav>
@@ -40,7 +40,7 @@
                             data-uri="spotify:track:{{ track_id }}" 
                             songID="{{ track_id }}"
                             style="border-radius:12px" 
-                            src="https://open.spotify.com/embed/track/{{ track_id }}?utm_source=generator" 
+                            src="https://open.spotify.com/embed/track/{{ track_id }}?enable-spotify-embed=true" 
                             width="100%" 
                             height="352" 
                             frameBorder="0" 
@@ -51,7 +51,11 @@
                     </div>
                     <div class="btn-container">
                         <button onclick="location.reload()" class="btn next-btn">Next</button>
-                        <a href="/recommended" class="btn generate-btn">Generate</a>
+                        <form action="/generate" method="POST">
+                            <!-- Hidden input to send the "focus" string -->
+                            <input type="hidden" name="focus_value" value="relax">
+                            <button type="submit" class="btn generate-btn">Generate</button>
+                        </form>
                     </div>
                 </div>
 

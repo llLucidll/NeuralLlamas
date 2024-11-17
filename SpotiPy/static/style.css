@@ -280,7 +280,7 @@ body {
 /* EEG Section Styling */
 .eeg-section {
     flex: 1;
-    max-width: 50%; /* Limit the width of the EEG graph section */
+    max-width: 100%; /* Limit the width of the EEG graph section */
     text-align: center;
 }
 
@@ -295,4 +295,22 @@ body {
     .eeg-section {
         max-width: 100%; /* Full width for smaller screens */
     }
+}
+
+/* Grid container for songs */
+.grid-container {
+  display: inline-grid; /* Changed from inline-grid to grid */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 20px; /* Spacing between grid items */
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 100%; /* Ensure grid container respects its parent's width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Each grid item */
+.grid-item {
+  display: flex; /* Changed from grid to flex for proper centering */
+  justify-content: center;
+  align-items: center;
 }
