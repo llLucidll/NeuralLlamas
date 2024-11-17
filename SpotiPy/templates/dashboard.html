@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Focus Flow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Link to Chart.js for the EEG graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header with all navigation options -->
+    <header class="main-header">
+        <a href="/" class="brand-logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Focus Flow Logo">
+            <h1 class="brand-logo-name">Focus Flow</h1>
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/focus">Focus Mode</a></li>
+                <li><a href="/relax">Relax Mode</a></li>
+                <li><a href="/saved">Personalized Tracks</a></li>
+                <li><a href="/dashboard" class="active">Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="container">
+        <h1>Dashboard</h1>
+        <p>Welcome to your dashboard! Here, you can view your EEG data and monitor your brainwave activity in real time.</p>
+        
+        <!-- EEG Graph Section -->
+        <section class="eeg-section">
+            <h2>Real-Time EEG Data Visualization</h2>
+            <!-- Canvas for EEG Chart -->
+            <canvas id="eegChart" width="800" height="400"></canvas>
+        </section>
+    </div>
+
+    <!-- Link to the JavaScript file for EEG WebSocket and chart setup -->
+    <script>
+        const socket = new WebSocket('ws://localhost:8765'); // Update port if needed
+        const eegChartCtx = document.getElementById('eegChart').getContext('2d');
+
+        // Chart.js setup
+        const eegChart = new Chart(eegChartCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Calm',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        data: []
+                    },
+                    {
+                        label: 'Alpha Waves',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        data: []
+                    },
+                    {
+                        label: 'Beta Waves',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        data: []
+                    },
+                    {
+                        label: 'Theta Waves',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        data: []
+                    },
+                    {
+                        label: 'Delta Waves',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        data: []
+                    },
+                    {
+                        label: 'Gamma Waves',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        data: []
+                    },
+                    {
+                        label: 'Concentration',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        data: []
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time (s)'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Amplitude'
+                        }
+                    }
+                }
+            }
+        });
+
+        // WebSocket message handling
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            eegChart.data.labels.push(new Date().toLocaleTimeString()); // Add time as label
+
+            // Add data points to datasets
+            eegChart.data.datasets[0].data.push(data.alpha);
+            eegChart.data.datasets[1].data.push(data.beta);
+            eegChart.data.datasets[2].data.push(data.theta);
+            eegChart.data.datasets[3].data.push(data.delta);
+            eegChart.data.datasets[4].data.push(data.gamma);
+            eegChart.data.datasets[5].data.push(data.concentration);
+
+            // Remove old data if exceeding 30 points
+            if (eegChart.data.labels.length > 30) {
+                eegChart.data.labels.shift();
+                eegChart.data.datasets.forEach((dataset) => dataset.data.shift());
+            }
+
+            eegChart.update(); // Update the chart
+        };
+    </script>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="/about">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
+

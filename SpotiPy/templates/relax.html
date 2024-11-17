@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relax Mode - Focus Flow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container full-height-grow">
+        <!-- Header -->
+        <header class="main-header">
+            <a href="/" class="brand-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Focus Flow Logo">
+                <h1 class="brand-logo-name">Focus Flow</h1>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/focus">Focus Mode</a></li>
+                    <li><a href="/relax" class="active">Relax Mode</a></li>
+                    <li><a href="/saved">Personalized Tracks</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container">
+            <section class="flex-container">
+                <!-- Playlist Section -->
+                <div class="playlist-section">
+                    <h1 class="title">Relax Playlist</h1>
+                    <p class="description">Curated music to help you stay calm and composed!</p>
+                    <div class="playlist-container">
+                        <!-- Embed Spotify Playlist -->
+                        <iframe
+                            class="spotify-embed"
+                            data-uri="spotify:track:{{ track_id }}" 
+                            songID="{{ track_id }}"
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/track/{{ track_id }}?enable-spotify-embed=true" 
+                            width="100%" 
+                            height="352" 
+                            frameBorder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="btn-container">
+                        <button onclick="location.reload()" class="btn next-btn">Next</button>
+                        <form action="/generate" method="POST">
+                            <!-- Hidden input to send the "focus" string -->
+                            <input type="hidden" name="focus_value" value="relax">
+                            <button type="submit" class="btn generate-btn">Generate</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Real-Time EEG Chart Section -->
+                <div class="eeg-section">
+                    <h2>Real-Time Calmness and Concentration</h2>
+                    <canvas id="relaxChart" width="400" height="300"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- EEG Chart Script -->
+    <script>
+        const socket = new WebSocket('ws://localhost:8765'); // Update the WebSocket URL if needed
+        let relaxChart;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const ctx = document.getElementById('relaxChart').getContext('2d');
+            relaxChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Calmness',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            data: []
+                        },
+                        {
+                            label: 'Concentration',
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            data: []
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time (s)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amplitude'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // WebSocket message handling
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                relaxChart.data.labels.push(new Date().toLocaleTimeString());
+                relaxChart.data.datasets[0].data.push(data.alpha); // Example for calmness
+                relaxChart.data.datasets[1].data.push(data.concentration); // Example for concentration
+                
+                if (relaxChart.data.labels.length > 30) {
+                    relaxChart.data.labels.shift();
+                    relaxChart.data.datasets.forEach(dataset => dataset.data.shift());
+                }
+
+                relaxChart.update();
+            };
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="/about">About Us</a></li>
+                </ul>
+            </nav>
+            <nav class="footer-nav">
+                <ul>
+                    <li>
+                        <a href="https://github.com/GrizzlyScar/NeuroLlama.git" class="social-link" target="_blank">
+                            GitHub
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
+
+

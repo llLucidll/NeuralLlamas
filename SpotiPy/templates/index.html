@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Focus Flow</title>
+</head>
+<body>
+    <div class="container full-height-grow">
+        <!-- Header with logo aligned to the left -->
+        <header class="main-header">
+            <a href="/" class="brand-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Focus Flow Logo">
+                <h1 class="brand-logo-name">Focus Flow</h1>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/focus">Focus Mode</a></li>
+                    <li><a href="/relax">Relax Mode</a></li>
+                    <li><a href="/saved">Personalized Tracks</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="img-wrapper">
+                <div class="lady-image"></div>
+            </div>
+            <div class="call-to-action">
+                <h1 class="title">Feel The Music</h1>
+                <span class="subtitle">Stream personalized music to help you focus or relax</span>
+                <div class="btn-container">
+                    <a href="/login" class="btn spotify-login">Login with Spotify</a>
+                </div>
+            </div>
+        </section>
+        
+        <div class="hero-circle-1"></div>
+        <div class="hero-circle-2"></div>
+        <div class="hero-circle-3"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="/about">About Us</a></li>
+                </ul>
+            </nav>
+            <nav class="footer-nav">
+                <ul>
+                    <!-- GitHub Link -->
+                    <li>
+                        <a href="https://github.com/GrizzlyScar/NeuroLlama.git" class="social-link" target="_blank">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 0.297C5.373 0.297 0 5.67 0 12.297C0 17.677 3.438 22.093 8.207 23.637C8.806 23.752 9.023 23.414 9.023 23.116V21.044C5.672 21.7 5.046 19.441 5.046 19.441C4.567 18.07 3.873 17.705 3.873 17.705C2.848 17.027 4.011 17.04 4.011 17.04C5.204 17.14 5.864 18.313 5.864 18.313C6.925 20.08 8.596 19.581 9.263 19.306C9.35 18.609 9.613 18.157 9.907 17.872C7.2 17.586 4.387 16.535 4.387 11.813C4.387 10.5 4.815 9.447 5.564 8.647C5.45 8.362 5.074 7.063 5.678 5.363C5.678 5.363 6.622 5.054 8.998 6.502C9.883 6.269 10.833 6.155 11.783 6.15C12.733 6.155 13.683 6.269 14.568 6.502C16.944 5.054 17.888 5.363 17.888 5.363C18.492 7.063 18.116 8.362 18.002 8.647C18.751 9.447 19.179 10.5 19.179 11.813C19.179 16.545 16.355 17.576 13.637 17.857C14.013 18.188 14.343 18.794 14.343 19.698V23.121C14.343 23.414 14.56 23.757 15.163 23.637C19.931 22.093 23.369 17.677 23.369 12.297C23.369 5.67 17.996 0.297 12 0.297Z" fill="white"/>
+                            </svg>
+                            GitHub
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

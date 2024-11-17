@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Songs - Focus Flow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 1.8em;
+        }
+
+        .audio-player {
+            margin: 20px 0;
+        }
+
+        .feedback-box {
+            margin: 20px 0;
+        }
+
+        .feedback-section {
+            margin-bottom: 20px;
+        }
+
+        .feedback-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .option-button {
+            display: none;
+        }
+
+        .option-label {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 25px;
+            background-color: #000;
+            color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option-button:checked + .option-label {
+            background-color: #fff;
+            color: #000;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .generate-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            background-color: #000;
+            color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+            cursor: not-allowed;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .generate-btn.enabled {
+            cursor: pointer;
+            background-color: #000;
+            color: #fff;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .generate-btn.enabled:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 1.5em;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-screen.visible {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <a href="/index" class="brand-logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Focus Flow Logo">
+            <h1 class="brand-logo-name">Focus Flow</h1>
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/focus" class="active">Focus Mode</a></li>
+                <li><a href="/relax">Relax Mode</a></li>
+                <li><a href="/saved">Personalized Tracks</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Recommended Songs</h1>
+        
+        <p>Based on your brainwave data, we’ve generated a personalized playlist to help you focus or relax.</p>
+
+        <!-- Audio Player -->
+        <p>Here's the recommended song:</p>
+        <section class="audio-player">
+            <audio controls>
+                <source src="{{ url_for('static', filename=song_file) }}" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+        </section>
+
+        <!-- Feedback Box -->
+        <section class="feedback-box">
+            <h2>Feedback</h2>
+
+            <!-- Tempo Feedback -->
+            <div class="feedback-section">
+                <label class="feedback-label">Tempo Feedback</label>
+                <div class="options-group">
+                    <input type="radio" id="tempo-slow" name="tempo" value="slow" class="option-button">
+                    <label for="tempo-slow" class="option-label" data-group="tempo">Slow</label>
+
+                    <input type="radio" id="tempo-fast" name="tempo" value="fast" class="option-button">
+                    <label for="tempo-fast" class="option-label" data-group="tempo">Fast</label>
+
+                    <input type="radio" id="tempo-ok" name="tempo" value="ok" class="option-button">
+                    <label for="tempo-ok" class="option-label" data-group="tempo">Ok</label>
+                </div>
+            </div>
+
+            <!-- Loudness Feedback -->
+            <div class="feedback-section">
+                <label class="feedback-label">Loudness Feedback</label>
+                <div class="options-group">
+                    <input type="radio" id="loudness-soft" name="loudness" value="soft" class="option-button">
+                    <label for="loudness-soft" class="option-label" data-group="loudness">Soft</label>
+
+                    <input type="radio" id="loudness-loud" name="loudness" value="loud" class="option-button">
+                    <label for="loudness-loud" class="option-label" data-group="loudness">Loud</label>
+
+                    <input type="radio" id="loudness-ok" name="loudness" value="ok" class="option-button">
+                    <label for="loudness-ok" class="option-label" data-group="loudness">Ok</label>
+                </div>
+            </div>
+
+            <!-- Energy Feedback -->
+            <div class="feedback-section">
+                <label class="feedback-label">Energy Feedback</label>
+                <div class="options-group">
+                    <input type="radio" id="energy-low" name="energy" value="low" class="option-button">
+                    <label for="energy-low" class="option-label" data-group="energy">Low</label>
+
+                    <input type="radio" id="energy-high" name="energy" value="high" class="option-button">
+                    <label for="energy-high" class="option-label" data-group="energy">High</label>
+
+                    <input type="radio" id="energy-ok" name="energy" value="ok" class="option-button">
+                    <label for="energy-ok" class="option-label" data-group="energy">Ok</label>
+                </div>
+            </div>
+
+            <!-- Overall Satisfaction -->
+            <div class="feedback-section">
+                <label class="feedback-label">Overall Satisfaction (1-5)</label>
+                <div class="options-group">
+                    <input type="radio" id="satisfaction-1" name="satisfaction" value="1" class="option-button">
+                    <label for="satisfaction-1" class="option-label" data-group="satisfaction">1</label>
+
+                    <input type="radio" id="satisfaction-2" name="satisfaction" value="2" class="option-button">
+                    <label for="satisfaction-2" class="option-label" data-group="satisfaction">2</label>
+
+                    <input type="radio" id="satisfaction-3" name="satisfaction" value="3" class="option-button">
+                    <label for="satisfaction-3" class="option-label" data-group="satisfaction">3</label>
+
+                    <input type="radio" id="satisfaction-4" name="satisfaction" value="4" class="option-button">
+                    <label for="satisfaction-4" class="option-label" data-group="satisfaction">4</label>
+
+                    <input type="radio" id="satisfaction-5" name="satisfaction" value="5" class="option-button">
+                    <label for="satisfaction-5" class="option-label" data-group="satisfaction">5</label>
+                </div>
+            </div>
+
+            <button id="generate-btn" class="generate-btn" disabled>Generate</button>
+        </section>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <p>Loading your next personalized song... Please wait.</p>
+    </div>
+
+    <script>
+        const generateButton = document.getElementById('generate-btn');
+        const loadingScreen = document.getElementById('loading-screen');
+        const feedbackGroups = ['tempo', 'loudness', 'energy', 'satisfaction'];
+
+        // Allow unselecting options
+        document.querySelectorAll('.option-label').forEach(label => {
+            label.addEventListener('click', () => {
+                const group = label.getAttribute('data-group');
+                const input = document.getElementById(label.getAttribute('for'));
+
+                if (input.checked) {
+                    input.checked = false;
+                } else {
+                    input.checked = true;
+                }
+
+                checkSelections();
+            });
+        });
+
+        function checkSelections() {
+            const allSelected = feedbackGroups.every(group =>
+                document.querySelector(`input[name="${group}"]:checked`)
+            );
+
+            if (allSelected) {
+                generateButton.disabled = false;
+                generateButton.classList.add('enabled');
+                generateButton.onclick = sendFeedback;
+            } else {
+                generateButton.disabled = true;
+                generateButton.classList.remove('enabled');
+                generateButton.onclick = null;
+            }
+        }
+
+        // function showLoadingScreen() {
+        //     // Display the loading screen
+        //     loadingScreen.classList.add('visible');
+
+        //     // Simulate the 2:30 wait time
+        //     setTimeout(() => {
+        //         window.location.reload();
+        //     }, 150000); // 2 minutes and 30 seconds
+        // }
+
+        function sendFeedback() {
+        const feedbackData = {};
+        feedbackGroups.forEach(group => {
+            const selectedInput = document.querySelector(`input[name="${group}"]:checked`);
+            if (selectedInput) {
+                feedbackData[group] = selectedInput.value;
+            }
+        });
+
+        fetch('/submit-feedback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(feedbackData),
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Feedback submitted successfully!');
+            } else {
+                alert('Error submitting feedback. Please try again.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+        // Display the loading screen
+        loadingScreen.classList.add('visible');
+
+        // Simulate the 2:30 wait time
+        setTimeout(() => {
+            window.location.reload();
+        }, 150000); // 2 minutes and 30 seconds
+    }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

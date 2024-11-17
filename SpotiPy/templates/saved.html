@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Songs - Focus Flow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container full-height-grow">
+        <!-- Header -->
+        <header class="main-header">
+            <a href="/" class="brand-logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Focus Flow Logo">
+                <h1 class="brand-logo-name">Focus Flow</h1>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/focus">Focus Mode</a></li>
+                    <li><a href="/relax">Relax Mode</a></li>
+                    <li><a href="/saved" class="active">Personalized Tracks</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="container">
+            <section class="saved-songs-section">
+                <h1 class="title">Personalized Tracks</h1>
+
+                <!-- Predefined Songs -->
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <iframe 
+                            id="iframe-1"
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/track/3ZgZ9NDAhTT0CnE3rTReqf?enable-spotify-embed=true" 
+                            data-uri="spotify:track:3ZgZ9NDAhTT0CnE3rTReqf" 
+                            songID="3ZgZ9NDAhTT0CnE3rTReqf"
+                            class="spotify-embed"
+                            width="100%" 
+                            height="352" 
+                            frameBorder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="grid-item">
+                        <iframe 
+                            id="iframe-2"
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/track/4Wzhby10BMwBaat4buM5ug?enable-spotify-embed=true" 
+                            data-uri="spotify:track:4Wzhby10BMwBaat4buM5ug" 
+                            songID="4Wzhby10BMwBaat4buM5ug"
+                            class="spotify-embed"
+                            width="100%" 
+                            height="352" 
+                            frameBorder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Dynamically Loaded Songs -->
+                <div class="grid-container">
+                    {% for id in track_ids %}
+                    <div class="grid-item">
+                        <iframe 
+                            id="iframe-{{ loop.index }}"
+                            style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/track/{{ id }}?enable-spotify-embed=true" 
+                            data-uri="spotify:track:{{ id }}" 
+                            songID="{{ id }}"
+                            class="spotify-embed"
+                            width="100%" 
+                            height="352" 
+                            frameBorder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="container">
+                <nav class="footer-nav">
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
+
+
+
+    
+
+
