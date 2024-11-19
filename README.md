@@ -22,3 +22,11 @@ We plan to refine our system with better metrics, improve performance with more 
 
 As you start the website, we will have no idea who you are, and what kind of musics you like. So we have connected with Spotify to recommend the top songs that you listen to + a few generic focus / relax music to understand your brain waves. As we learn more about you, we will store your eeg data and average it out with the song and store it in Mongo for music suggestions and recommendations
 
+
+## Suggesting Spotify songs on what helps you focus or relax based on users choice
+
+![462557814_884408043457345_8454530162400073174_n](https://github.com/user-attachments/assets/c4635071-e7c5-4f6d-ad3a-f8f06616af5e)
+
+When you click on either focus mode or relax mode, based on the mode we will see what kind of music peaks your concentration/calmness and based on that we would be recommending you songs from the Spotify Api. It is a radio feature such that when you click next, new music is generated. To the right hand side, you can also see the focus graph to keep tabs of your performance. 
+
+
