@@ -2,9 +2,12 @@
 
 ![pic1](https://github.com/user-attachments/assets/3f8fd5ba-7a16-4432-9606-070b6491bb2d)
 
-
 ## Our DevPost Link
 https://devpost.com/software/focusflow-1u9ndy
+
+## A fun video to demonstrate our project
+
+https://youtu.be/06rVeEn10kQ?feature=shared
 
 As a team that struggled with focus and stress, we discovered the power of music in improving our well-being. This shared experience inspired us to enhance the way music helps individuals, using brain data to personalize recommendations.
 
