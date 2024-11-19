@@ -15,3 +15,10 @@ We are proud of our polished product, created in just 64 hours, and our cohesive
 We gained valuable insights into brain function, scientific literature, and practical applications of our knowledge. Collaborating in an open, creative environment taught us the joy of turning passions into impactful projects.
 
 We plan to refine our system with better metrics, improve performance with more data, and collaborate with industry experts to advance FocusFlow's capabilities.
+
+## Training for the Users
+
+![462554488_1249143069741344_384725285181268506_n](https://github.com/user-attachments/assets/7121d5d9-520c-45af-b2c6-0b7661110dfe)
+
+As you start the website, we will have no idea who you are, and what kind of musics you like. So we have connected with Spotify to recommend the top songs that you listen to + a few generic focus / relax music to understand your brain waves. As we learn more about you, we will store your eeg data and average it out with the song and store it in Mongo for music suggestions and recommendations
+
