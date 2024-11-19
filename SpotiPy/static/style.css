@@ -298,6 +298,22 @@ body {
 }
 
 /* Grid container for songs */
+/* Ensure the section spans the full width of the screen */
+.saved-songs-section {
+  width: 100%; /* Set the width to 100% of the viewport width */
+  margin: 0;    /* Remove default margin */
+  padding: 0;   /* Remove default padding */
+  box-sizing: border-box; /* Ensure padding doesn't affect the width */
+}
+
+/* Ensure any grid containers inside the section align correctly */
+.saved-songs-section .grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Adjust as needed */
+  justify-content: center; /* Center items if desired */
+}
+
 .grid-container {
   display: inline-grid; /* Changed from inline-grid to grid */
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */

@@ -97,8 +97,8 @@ def focus_mode():
         # Output the list of song IDs
         print("Songs with average_concentration > 0.4:")
         print(song_ids)
-
-        recommended_track_id = get_recommendations(sp, ','.join(song_ids))
+        seeds = song_ids[:4]
+        recommended_track_id = get_recommendations(sp, seeds)
         # recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
         return render_template("focus.html", track_id=recommended_track_id)
     except Exception as e:
@@ -126,7 +126,6 @@ def relax_mode():
 
         # Projection to include only songID and exclude _id
         projection = { 'songID': 1, '_id': 0 }
-
         # Execute the query
         results = collection.find(query, projection)
 
@@ -138,11 +137,12 @@ def relax_mode():
 
         # Output the list of song IDs
         print("Songs with average_calm < 0.2:")
-        print(song_ids)
-        print(','.join(song_ids))
+        print("Relax Song IDs", song_ids)
 
-        # recommended_track_id = get_recommendations(sp, ','.join(song_ids))
-        recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
+        seeds = song_ids[:4]
+        print(" 5 Relax Seeds", seeds)
+        recommended_track_id = get_recommendations(sp, seeds)
+        # recommended_track_id = get_recommendations(sp, '3ZgZ9NDAhTT0CnE3rTReqf')
 
         return render_template("relax.html", track_id=recommended_track_id)
     except Exception as e:
@@ -161,8 +161,8 @@ def saved_songs():
     try:
         sp = Spotify(auth=session['access_token'])
         # Get the top 25 tracks
-        top25 = sp.current_user_top_tracks(limit=25)
-        track_ids = [track['id'] for track in top25['items']][:5]
+        top25 = sp.current_user_top_tracks(limit=50, time_range='long_term')
+        track_ids = random.sample([track['id'] for track in top25['items']], 6)
 
         print(track_ids)  # Debugging print statement
 
@@ -217,9 +217,17 @@ def recommended():
         fs = gridfs.GridFS(db)
 
         output_path = "SpotiPy/static/new.wav"
-        file = fs.find_one({"filename": "song.wav"})  # Replace with your file's name
+        
+        # Query to retrieve the latest file by uploadDate
+        cursor = fs.find({"filename": "song.wav"}).sort("uploadDate", -1).limit(1)
 
-        if file:
+        # Ensure the cursor is not empty
+        latest_file = None
+        for file in cursor:
+            latest_file = file
+            break
+
+        if latest_file:
             with open(output_path, "wb") as output_file:
                 output_file.write(file.read())
             print(f"File retrieved and saved as: {output_path}")
@@ -417,8 +425,9 @@ def get_or_create_playlist(sp, playlist_name, description):
     user_profile = sp.me()
     return sp.user_playlist_create(user=user_profile['id'], name=playlist_name, public=False, description=description)
 
-def get_recommendations(sp, song_id, num_tracks=50):
-    recommended_tracks = sp.recommendations(seed_tracks=[song_id], limit=num_tracks)
+def get_recommendations(sp, song_id, num_tracks=100):
+    recommended_tracks = sp.recommendations(seed_tracks=song_id, limit=num_tracks)
+    # recommended_tracks = sp.recommendations(seed_tracks=','.join([song_id]), limit=num_tracks)
     recommended_track = recommended_tracks['tracks'][random.randint(0, num_tracks-1)]['id']
     print(recommended_track)
     return recommended_track
