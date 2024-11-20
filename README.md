@@ -36,8 +36,8 @@ As you start the website, we will have no idea who you are, and what kind of mus
 
 When you click on either focus mode or relax mode, based on the mode we will see what kind of music peaks your concentration/calmness and based on that we would be recommending you songs from the Spotify Api. It is a radio feature such that when you click next, new music is generated. To the right hand side, you can also see the focus graph to keep tabs of your performance. 
 
-## GenAI: Generating Music based on the mode and your eeg waves with Reinforcement Learning feedback loop
+## GenAI: Generating Music based on the mode and your eeg waves using RL feedback loop
 
 ![462577843_1288581838944316_1374247918101071924_n](https://github.com/user-attachments/assets/263f9908-2c7a-4c44-8dc0-74a6554ec0a6)
 
-When you click generate from the focus tab or the relax tab, we will be using a pre-existing gen ai model from Meta as we feed in our eeg waves and the model detects what kind of music you want. And to keep it accurate, we also require RL feedback loop to understand your choices better and generate better songs, suited for you
+When you click generate from the focus tab or the relax tab, we used a pre-trained generative model from Meta (MusicGEN) as we feed in our eeg waves and the model detects what kind of music you want. And to keep it accurate, we also require RL feedback loop to understand your choices better and generate better songs, suited for you
